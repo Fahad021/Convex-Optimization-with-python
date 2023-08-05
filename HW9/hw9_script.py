@@ -20,9 +20,7 @@ def obj(x, a):
     """
     x.shape = (n,1)
     """
-    out = -np.log((1 - a.dot(x))).sum() - np.log((1 - x ** 2)).sum()
-    # logger.info("obj:\t")
-    return out
+    return -np.log((1 - a.dot(x))).sum() - np.log((1 - x ** 2)).sum()
 
 
 def grad(x, a):
@@ -35,9 +33,7 @@ def hess(x, a):
 
 
 def is_in_domain(x, a):
-    if not (a.dot(x) <= 1).all() or not (np.abs(x) <= 1).all():
-        return False
-    return True
+    return bool((a.dot(x) <= 1).all() and (np.abs(x) <= 1).all())
 
 
 def backtracking(obj_func, x, step_size, grad, is_valid_x_func
@@ -1277,7 +1273,7 @@ def synt_rank_aggr_data():
 
 # endregion
 
-if "__main__" == __name__:
+if __name__ == "__main__":
     mode = "ND"
 
     x0 = np.zeros((n, 1))
@@ -1292,10 +1288,9 @@ if "__main__" == __name__:
         gradient_decent(obj_func, grad_func
                         , in_domain_func, x0, logger=logger, max_itr=10 ** 4)
 
-    # newton descent
     elif mode == "ND":
         hess_func = partial(hess, a=A)
-        tol = 10 ** -6
         logger = logging.getLogger("NewtonDescent")
+        tol = 10 ** -6
         newton_decent(obj_func, grad_func, in_domain_func
                       , hess_func, tol, x0, logger=logger, max_itr=10 ** 4)

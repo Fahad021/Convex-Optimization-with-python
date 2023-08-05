@@ -118,13 +118,11 @@ def build_game_incidence_matrix(data, num_teams):
         j, k, y = r
         GIM[p, j - 1] = y   # -1 because of matlab indexing
         GIM[p, k - 1] = -y  # -1 because of matlab indexing
-    GIM_sp = spr.csc_matrix(GIM)
-    return GIM_sp
+    return spr.csc_matrix(GIM)
 
 def cvx_log_noramcdf(x: cvx.Variable, mu, sigma, dt:float=10**-5):
     x_ = (x-mu)/(sigma*np.sqrt(2))
-    cdf = 0.5 * (1 + erf(x_))
-    return cdf
+    return 0.5 * (1 + erf(x_))
 
 # def erf(x: cvx.Variable, dt:float):
 #     t = np.linspace(0 ,x, int(1./dt))
@@ -152,5 +150,3 @@ def synt_interdict_alloc_data():
     return n, m, a, x_max, B, edges, A
 
 #endregion
-if "__main__" == __name__:
-    pass
